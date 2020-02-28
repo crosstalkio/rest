@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"os"
 
-	"bitbucket.org/crosstalkio/log"
-	"bitbucket.org/crosstalkio/rest"
+	"github.com/crosstalkio/log"
+	"github.com/crosstalkio/rest"
 	"github.com/gorilla/mux"
 )
 

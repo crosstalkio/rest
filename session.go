@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"strings"
 
-	"bitbucket.org/crosstalkio/log"
+	"github.com/crosstalkio/log"
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/mux"
 )

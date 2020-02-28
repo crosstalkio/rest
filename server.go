@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"bitbucket.org/crosstalkio/log"
+	"github.com/crosstalkio/log"
 )
 
 type HandlerFunc func(s *Session)

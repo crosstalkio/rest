@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"bitbucket.org/crosstalkio/log"
-	"bitbucket.org/crosstalkio/rest"
+	"github.com/crosstalkio/log"
+	"github.com/crosstalkio/rest"
 )
 
 func TestServer(t *testing.T) {

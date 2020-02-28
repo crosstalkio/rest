@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bitbucket.org/crosstalkio/rest"
+	"github.com/crosstalkio/rest"
 	"github.com/golang/protobuf/proto"
 )
 

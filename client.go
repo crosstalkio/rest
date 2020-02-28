@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
-	"bitbucket.org/crosstalkio/log"
+	"github.com/crosstalkio/log"
 )
 
 const (
