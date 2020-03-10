@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/crosstalkio/log"
+	"github.com/golang/protobuf/proto"
 )
 
 const (
@@ -98,7 +98,7 @@ func (r *Response) Decode(val interface{}) error {
 
 type Client struct {
 	log.Sugar
-	client   *http.Client
+	Client   *http.Client
 	URL      string
 	auth     Auth
 	protobuf bool
@@ -107,7 +107,7 @@ type Client struct {
 func NewClient(logger log.Logger, timeout time.Duration) *Client {
 	return &Client{
 		Sugar:  log.NewSugar(logger),
-		client: &http.Client{Timeout: 5 * time.Second},
+		Client: &http.Client{Timeout: 5 * time.Second},
 	}
 }
 
@@ -238,7 +238,7 @@ func (c *Client) request(method string, header http.Header, url string, r interf
 		}
 	}
 	c.dumpRequest(req, body)
-	res, err := c.client.Do(req)
+	res, err := c.Client.Do(req)
 	if err != nil {
 		c.Errorf("Failed to make request: %s", err.Error())
 		return nil, err
