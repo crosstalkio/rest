@@ -104,10 +104,10 @@ func (s *Session) encode(status int, val interface{}) error {
 	}
 }
 
-func (s *Session) Status(status int, v interface{}) error {
+func (s *Session) Status(status int, v interface{}) {
 	if isNil(v) {
 		s.writeHeader(status)
-		return nil
+		return
 	}
 	var msg string
 	switch v := v.(type) {
@@ -116,22 +116,28 @@ func (s *Session) Status(status int, v interface{}) error {
 	case error:
 		msg = v.Error()
 	default:
-		return s.encode(status, v)
+		err := s.encode(status, v)
+		if err != nil {
+			s.Errorf("Failed to encode body: %s", err.Error())
+		}
+		return
 	}
 	s.ResponseWriter.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	s.ResponseWriter.Header().Set("X-Content-Type-Options", "nosniff")
 	s.writeHeader(status)
 	s.Debugf("Writing text body: %s", msg)
 	_, err := fmt.Fprintln(s.ResponseWriter, msg)
-	return err
+	if err != nil {
+		s.Errorf("Failed to write text body: %s", err.Error())
+	}
 }
 
-func (s *Session) StatusCode(code int) error {
-	return s.Status(code, http.StatusText(code))
+func (s *Session) StatusCode(code int) {
+	s.Status(code, http.StatusText(code))
 }
 
-func (s *Session) Statusf(code int, format string, args ...interface{}) error {
-	return s.Status(code, fmt.Sprintf(format, args...))
+func (s *Session) Statusf(code int, format string, args ...interface{}) {
+	s.Status(code, fmt.Sprintf(format, args...))
 }
 
 func (s *Session) Vars() map[string]string {

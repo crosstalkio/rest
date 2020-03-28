@@ -18,27 +18,27 @@ func UserHandler(s *rest.Session) {
 	case "GET":
 		user := users[id]
 		if user == nil {
-			_ = s.Status(404, nil)
+			s.Status(404, nil)
 			return
 		}
-		_ = s.Status(200, user)
+		s.Status(200, user)
 		return
 	case "POST":
 		user := &User{}
 		err := s.Decode(user)
 		if err != nil {
-			_ = s.Status(400, nil)
+			s.Status(400, nil)
 			return
 		}
 		users[id] = user
 	case "DELETE":
 		if users[id] == nil {
-			_ = s.Status(404, nil)
+			s.Status(404, nil)
 			return
 		}
 		delete(users, id)
 	default:
-		_ = s.Status(405, nil)
+		s.Status(405, nil)
 		return
 	}
 }
