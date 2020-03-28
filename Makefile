@@ -13,9 +13,9 @@ tidy:
 $(SAMPLE): $(GOFILES)
 	go build -o $@ ./sample
 
-clean:
-	rm -f sample/sample
-	rm -f sample/*.pb.go
+clean: clean/proto
+	rm -f go.sum
+	rm -f $(SAMPLE)
 
 test: # -count=1 disables cache
 	go test -v -race -count=1 .
