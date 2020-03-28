@@ -49,6 +49,7 @@ before_script:
 # .golangci.yml file at the top level of your repo.
 script:
   - make clean
+  - make tidy
   - make
   - make lint
   - make test

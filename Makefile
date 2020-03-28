@@ -4,7 +4,7 @@ PBGO := $(PROTOS:.proto=.pb.go)
 SAMPLE := sample/sample
 GOFILES := go.mod $(wildcard *.go) $(wildcard */*.go)
 
-all: $(PBGO) tidy $(SAMPLE)
+all: $(PBGO) $(SAMPLE)
 	go build .
 
 tidy:
@@ -24,7 +24,7 @@ test: # -count=1 disables cache
 serve:
 	go run ./sample
 
-.PHONY: all tidy test clean serve
+.PHONY: all tidy clean test serve
 
 include .make/lint.mk
 include .make/proto.mk
