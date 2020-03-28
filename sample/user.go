@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/crosstalkio/rest"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 )
 
 var users = map[string]*User{
@@ -18,28 +18,27 @@ func UserHandler(s *rest.Session) {
 	case "GET":
 		user := users[id]
 		if user == nil {
-			s.Status(404, nil)
+			_ = s.Status(404, nil)
 			return
 		}
-		s.Status(200, user)
+		_ = s.Status(200, user)
 		return
 	case "POST":
 		user := &User{}
 		err := s.Decode(user)
 		if err != nil {
-			s.Status(400, nil)
+			_ = s.Status(400, nil)
 			return
 		}
 		users[id] = user
 	case "DELETE":
 		if users[id] == nil {
-			s.Status(404, nil)
+			_ = s.Status(404, nil)
 			return
 		}
 		delete(users, id)
 	default:
-		s.Status(405, nil)
+		_ = s.Status(405, nil)
 		return
 	}
-	return
 }

@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	"github.com/crosstalkio/log"
-	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/mux"
+	"google.golang.org/protobuf/proto"
 )
 
 const (

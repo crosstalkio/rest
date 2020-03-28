@@ -1,28 +1,30 @@
 PROTOS := $(wildcard */*.proto)
 PBGO := $(PROTOS:.proto=.pb.go)
 
-PROTOGENGO := $(GOPATH)/bin/protoc-gen-go
+SAMPLE := sample/sample
+GOFILES := go.mod $(wildcard *.go) $(wildcard */*.go)
 
-all: $(PBGO)
-	go mod tidy
+all: $(PBGO) tidy $(SAMPLE)
 	go build .
-	go build -o sample/sample ./sample
 
-$(PROTOGENGO):
-	go install google.golang.org/protobuf/cmd/protoc-gen-go
+tidy:
+	go mod tidy
 
-%.pb.go: %.proto
-	protoc --go_out=. $<
-
-run:
-	go run ./sample
-
-test:
-	go test -count=1 .
-	go test -count=1 ./sample
+$(SAMPLE): $(GOFILES)
+	go build -o $@ ./sample
 
 clean:
 	rm -f sample/sample
 	rm -f sample/*.pb.go
 
-.PHONY: all run test clean
+test: # -count=1 disables cache
+	go test -v -race -count=1 .
+	go test -v -race -count=1 ./sample
+
+serve:
+	go run ./sample
+
+.PHONY: all tidy test clean serve
+
+include .make/lint.mk
+include .make/proto.mk

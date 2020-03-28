@@ -1,4 +1,4 @@
-# Minimal REST Framework
+# Minimalist REST Framework [![Build Status](https://travis-ci.com/crosstalkio/rest.svg?branch=master)](https://travis-ci.com/crosstalkio/rest)
 
 This package leverages the power of ```gorilla/mux``` and ```protobuf``` to provide a REST framework with the following characteristics:
 

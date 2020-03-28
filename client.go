@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/crosstalkio/log"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 )
 
 const (
@@ -165,7 +165,7 @@ func (c *Client) Request(method, url string, r interface{}) (*Response, error) {
 			}
 		}
 	}
-	c.Infof("Requested in %v: %s %s", time.Now().Sub(start), method, url)
+	c.Infof("Requested in %v: %s %s", time.Since(start), method, url)
 	return res, nil
 }
 
@@ -214,10 +214,8 @@ func (c *Client) request(method string, header http.Header, url string, r interf
 	if ctype != "" {
 		req.Header.Set(contentTypeHeader, ctype)
 	}
-	if header != nil {
-		for k, v := range header {
-			req.Header[k] = v
-		}
+	for k, v := range header {
+		req.Header[k] = v
 	}
 	if c.auth != nil {
 		auth := c.auth
@@ -280,7 +278,7 @@ func (c *Client) dumpRequest(req *http.Request, data []byte) {
 			dump.Headers[k] = v
 		}
 	}
-	if data != nil && len(data) > 0 {
+	if len(data) > 0 {
 		ctype := req.Header.Get(contentTypeHeader)
 		if strings.HasPrefix(ctype, jsonContentType) {
 			dump.Body = json.RawMessage(data)
@@ -313,7 +311,7 @@ func (c *Client) dumpResponse(res *http.Response, data []byte) {
 			dump.Headers[k] = v
 		}
 	}
-	if data != nil && len(data) > 0 {
+	if len(data) > 0 {
 		ctype := res.Header.Get(contentTypeHeader)
 		if strings.HasPrefix(ctype, jsonContentType) {
 			dump.Body = json.RawMessage(data)

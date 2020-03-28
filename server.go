@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/gorilla/mux"
 	"github.com/crosstalkio/log"
+	"github.com/gorilla/mux"
 )
 
 type HandlerFunc func(s *Session)
@@ -20,7 +20,10 @@ type route struct {
 
 func (rt *route) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Body != nil {
-		defer io.Copy(ioutil.Discard, r.Body)
+		defer func() {
+			// drain out to ensure keep-alive working
+			_, _ = io.Copy(ioutil.Discard, r.Body)
+		}()
 	}
 	s := &Session{
 		Context:        log.NewContext(r.Context(), rt.server),
