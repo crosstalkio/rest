@@ -1,5 +1,6 @@
 syntax = "proto2";
 package main;
+option go_package = "sample;main";
 
 message User {
 	required string email = 1;
