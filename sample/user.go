@@ -6,7 +6,7 @@ import (
 )
 
 var users = map[string]*User{
-	"alice": &User{
+	"alice": {
 		Email:       proto.String("alice@foo.com"),
 		DisplayName: proto.String("Alice"),
 	},
