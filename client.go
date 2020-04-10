@@ -280,7 +280,6 @@ func (c *Client) dumpRequest(req *http.Request, data []byte) {
 		URL:      req.URL.RequestURI(),
 		Protocol: req.Proto,
 		Headers:  make(map[string]interface{}),
-		Body:     data,
 	}
 	for k, v := range req.Header {
 		if len(v) == 1 {
@@ -313,7 +312,6 @@ func (c *Client) dumpResponse(res *http.Response, data []byte) {
 		Status:   res.Status,
 		Protocol: res.Proto,
 		Headers:  make(map[string]interface{}),
-		Body:     data,
 	}
 	for k, v := range res.Header {
 		if len(v) == 1 {
