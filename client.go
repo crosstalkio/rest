@@ -3,6 +3,7 @@ package rest
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -102,6 +103,7 @@ type Client struct {
 	URL      string
 	auth     Auth
 	protobuf bool
+	status   int
 }
 
 func NewClient(logger log.Logger, timeout time.Duration) *Client {
@@ -118,6 +120,11 @@ func (c *Client) Auth(auth Auth) *Client {
 
 func (c *Client) Protobuf() *Client {
 	c.protobuf = true
+	return c
+}
+
+func (c *Client) ExpectStatus(status int) *Client {
+	c.status = status
 	return c
 }
 
@@ -248,6 +255,10 @@ func (c *Client) request(method string, header http.Header, url string, r interf
 		return nil, err
 	}
 	c.dumpResponse(res, data)
+	if c.status != 0 && c.status != res.StatusCode {
+		c.Errorf("Unepxected status code: %d", res.StatusCode)
+		return nil, errors.New(res.Status)
+	}
 	res.Body = ioutil.NopCloser(bytes.NewBuffer(data))
 	return &Response{
 		Sugar:    c.Sugar,
