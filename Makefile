@@ -7,13 +7,23 @@ GOFILES := go.mod $(wildcard *.go) $(wildcard */*.go)
 all: $(PBGO) $(SAMPLE)
 	go build .
 
+include .make/golangci-lint.mk
+include .make/protoc.mk
+include .make/protoc-gen-go.mk
+
 tidy:
 	go mod tidy
+
+lint: $(GOLANGCI_LINT)
+	$(realpath $(GOLANGCI_LINT)) run
 
 $(SAMPLE): $(GOFILES)
 	go build -o $@ ./sample
 
-clean: clean/proto
+clean/proto:
+	rm -f $(PBGO)
+
+clean: clean/golangci-lint clean/protoc clean/protoc-gen-go clean/proto
 	rm -f go.sum
 	rm -f $(SAMPLE)
 
@@ -24,7 +34,4 @@ test: # -count=1 disables cache
 serve:
 	go run ./sample
 
-.PHONY: all tidy clean test serve
-
-include .make/lint.mk
-include .make/proto.mk
+.PHONY: all tidy lint clean test serve
