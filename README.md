@@ -179,26 +179,4 @@ However IMHO, REST is resource-oriented, but RPC is operation-oriented. They are
 
 ## Sample Code
 
-Sample code of the REST user service, powered by ```protobuf```, was replaced under ```/sample``` folder. Before running the sample, you would have to code-gen from ```user.proto``` first.
-
-```shell
-protoc --go_out=. user.proto
-```
-
-To run the REST user service:
-
-```shell
-go run user.go user.pb.go
-```
-
-To play with curl, you can try requests like this:
-
-```shell
-curl http://127.0.0.1:8080/user/alice
-```
-
-And you can also take a look at ```user_test.go``` or just run it:
-
-```shell
-go test
-```
+Check out for our [minimalist sample code](https://github.com/crosstalkio/rest-sample).

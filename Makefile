@@ -1,10 +1,6 @@
-PROTOS := $(wildcard */*.proto)
-PBGO := $(PROTOS:.proto=.pb.go)
+GOSRCS := go.mod $(wildcard *.go) $(wildcard */*.go)
 
-SAMPLE := sample/sample
-GOFILES := go.mod $(wildcard *.go) $(wildcard */*.go)
-
-all: $(PBGO) $(SAMPLE)
+all:
 	go build .
 
 include .make/golangci-lint.mk
@@ -17,21 +13,10 @@ tidy:
 lint: $(GOLANGCI_LINT)
 	$(realpath $(GOLANGCI_LINT)) run
 
-$(SAMPLE): $(GOFILES)
-	go build -o $@ ./sample
-
-clean/proto:
-	rm -f $(PBGO)
-
-clean: clean/golangci-lint clean/protoc clean/protoc-gen-go clean/proto
+clean: clean/golangci-lint
 	rm -f go.sum
-	rm -f $(SAMPLE)
 
 test: # -count=1 disables cache
-	go test -v -race -count=1 .
-	go test -v -race -count=1 ./sample
+	go test -v -race -count=1
 
-serve:
-	go run ./sample
-
-.PHONY: all tidy lint clean test serve
+.PHONY: all tidy lint clean test
