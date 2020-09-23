@@ -33,23 +33,25 @@ type Session struct {
 	ResponseWriter http.ResponseWriter
 }
 
-func (s *Session) RemoteAddr() net.IP {
-	addr := s.Request.RemoteAddr
-	fwds := s.Request.Header["X-Forwarded-For"]
-	if fwds != nil {
-		fwd := fwds[0]
+func (s *Session) RemoteHost() (net.IP, error) {
+	var host string
+	var err error
+	fwd := s.Request.Header.Get("X-Forwarded-For")
+	if fwd != "" {
 		splits := strings.Split(fwd, ",")
-		addr = splits[0]
+		host = splits[0]
+	} else {
+		addr := s.Request.RemoteAddr
+		host, _, err = net.SplitHostPort(addr)
+		if err != nil {
+			host = addr
+		}
 	}
-	host, _, err := net.SplitHostPort(addr)
-	if err == nil {
-		addr = host
-	}
-	ip := net.ParseIP(addr)
+	ip := net.ParseIP(host)
 	if ip == nil {
-		s.Errorf("Failed to parse remote addr: %s => %s", addr, err.Error())
+		return nil, fmt.Errorf("Invalid IP address: %s", host)
 	}
-	return ip
+	return ip, nil
 }
 
 func (s *Session) RequestHeader() http.Header {
